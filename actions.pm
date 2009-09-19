@@ -7,15 +7,27 @@ Genfile::Grammar::Actions - ast transformations for Genfile
 class Genfile::Grammar::Actions;
 
 method TOP($/) {
+  our @nodes;
+  make Genfile::File.new(:value(@nodes));
+}
+
+method nodes($/) {
+  our @nodes;
+  @nodes.push($($<node>));
+}
+
+method node($/, $key) {
+  if($key) {
+    make $($/{$key});
+  }
 }
 
 method text($/) {
+  make Genfile::Text.new( :text( ~$/) );
 }
 
 method identifier($/) {
-}
-
-method delimiter($/) {
+  make Genfile::Identifier.new( :text( ~$<text> ));
 }
 
 # Local Variables:

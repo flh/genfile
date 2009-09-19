@@ -10,19 +10,28 @@ parser.pg - Parser for the build file generator
 
 grammar Genfile::Grammar is PCT::Grammar;
 
-rule TOP {
+token TOP {
   ^
-  <text>
-  $
+  <nodes>
+  $ {*}
 }
 
-rule text {
-  <!delimiter>*
-  | <!delimiter>* <identifier> <text>
+token text {
+  <-delimiter>+ {*}
 }
 
-rule identifier {
-  <delimiter> <!delimiter>+ <delimiter>
+token node {
+  <identifier>     {*} #= identifier
+  | <text>         {*} #= text
+}
+
+token nodes {
+  <node> {*} <nodes>
+  | <?>
+}
+
+token identifier {
+  <delimiter> <text> <delimiter> {*}
 }
 
 token delimiter {

@@ -32,7 +32,7 @@ Creates the Genfile compiler using a C<PCT::HLLCompiler> object.
 .sub '' :anon :load :init
     .local pmc p6meta
     p6meta = new 'P6metaclass'
-    p6meta.'new_class'('Genfile::Compiler', 'parent'=>'PCT::HLLCompiler')
+    p6meta.'new_class'('Genfile::Compiler', 'parent'=>'PCT::HLLCompiler', 'attr' => 'mappings')
 
     $P0 = get_hll_global ['Genfile'], 'Compiler'
     $P1 = $P0.'new'()
@@ -42,6 +42,11 @@ Creates the Genfile compiler using a C<PCT::HLLCompiler> object.
     $P1.'parsegrammar'($P2)
     $P2 = get_hll_namespace ['Genfile'; 'Grammar'; 'Actions']
     $P1.'parseactions'($P2)
+    $P1.'removestage'('post')
+    $P1.'addstage'('emit', 'before' => 'pir')
+
+    $P0 = new ['ResizablePMCArray']
+    set_hll_global ['Genfile'; 'Grammar'; 'Actions'], '@nodes', $P0
 .end
 
 .include 'genfile_grammar.pir'
@@ -59,6 +64,8 @@ to the Genfile compiler.
     .param pmc args
 
     $P0 = compreg 'Genfile'
+    $P1 = new ['Hash']
+    $P0.'mappings'($P1)
     .tailcall $P0.'command_line'(args)
 .end
 

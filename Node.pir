@@ -14,6 +14,7 @@
     p6meta = new 'P6metaclass'
     base = p6meta.'new_class'('Genfile::Node', 'parent'=>'PAST::Node')
 
+    p6meta.'new_class'('Genfile::File', 'parent'=>base)
     p6meta.'new_class'('Genfile::Text', 'parent'=>base)
     p6meta.'new_class'('Genfile::Identifier', 'parent'=>base)
 .end
@@ -22,6 +23,14 @@
     .param pmc value           :optional
     .param int has_value       :opt_flag
     .tailcall self.'attr'('text', value, has_value)
+.end
+
+.namespace ['Genfile'; 'File']
+
+.sub 'value' :method
+    .param pmc value           :optional
+    .param int has_value       :opt_flag
+    .tailcall self.'attr'('value', value, has_value)
 .end
 
 # Local Variables:

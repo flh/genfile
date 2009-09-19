@@ -73,5 +73,5 @@ help:
 	@echo ""
 
 ##  cleaning
-clean: testclean
+clean:
 	$(RM_F) $(CLEANUPS)

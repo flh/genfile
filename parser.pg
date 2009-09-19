@@ -1,0 +1,30 @@
+=head1 NAME
+
+parser.pg - Parser for the build file generator
+
+=head1 DESCRIPTION
+
+=head2 GRAMMAR RULES
+
+=cut
+
+grammar Genfile::Grammar is PCT::Grammar;
+
+rule TOP {
+  {*}
+  <text>
+  ^
+}
+
+rule text {
+  <!delimiter>*
+  | <!delimiter>* <identifier> <text>
+}
+
+rule identifier {
+  <delimiter> <!delimiter>+ <delimiter>
+}
+
+token delimiter {
+  '@'
+}

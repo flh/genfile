@@ -11,9 +11,9 @@ parser.pg - Parser for the build file generator
 grammar Genfile::Grammar is PCT::Grammar;
 
 rule TOP {
-  {*}
-  <text>
   ^
+  <text>
+  $
 }
 
 rule text {

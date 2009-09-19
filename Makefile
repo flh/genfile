@@ -27,9 +27,9 @@ PBC_TO_EXE    = $(BUILD_DIR)/pbc_to_exe$(EXE)
 
 SOURCES = genfile.pir \
   genfile_grammar.pir \
-  genfile_actions.pir
-
-BUILTINS_PIR = # \
+  genfile_actions.pir \
+  Compiler.pir \
+  Node.pir
 
 CLEANUPS = \
   genfile.pbc \

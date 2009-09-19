@@ -6,7 +6,16 @@ Genfile::Grammar::Actions - ast transformations for Genfile
 
 class Genfile::Grammar::Actions;
 
-method TOP($/, $key) {
+method TOP($/) {
+}
+
+method text($/) {
+}
+
+method identifier($/) {
+}
+
+method delimiter($/) {
 }
 
 # Local Variables:

@@ -24,6 +24,15 @@ Creates the Genfile compiler using a C<PCT::HLLCompiler> object.
     cns = get_hll_namespace
     exports = split ' ', 'PAST PCT PGE'
     parrotns.'export_to'(cns, exports)
+.end
+
+.include 'Compiler.pir'
+.include 'Node.pir'
+
+.sub '' :anon :load :init
+    .local pmc p6meta
+    p6meta = new 'P6metaclass'
+    p6meta.'new_class'('Genfile::Compiler', 'parent'=>'PCT::HLLCompiler')
 
     $P0 = get_hll_global ['Genfile'], 'Compiler'
     $P1 = $P0.'new'()
@@ -45,6 +54,7 @@ to the Genfile compiler.
 
 =cut
 
+.namespace []
 .sub 'main' :main
     .param pmc args
 

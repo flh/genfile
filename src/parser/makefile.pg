@@ -1,0 +1,23 @@
+=head1 NAME
+
+makefile.pg - Adapted parser for Makefiles
+
+=head1 DESCRIPTION
+
+=head2 GRAMMAR RULES
+
+=cut
+
+grammar Genfile::Grammar::Makefile is Genfile::Grammar;
+
+token character {
+  <-delimiter>
+}
+
+token text {
+  <character>+ {*}
+}
+
+token slash {
+  '/'
+}

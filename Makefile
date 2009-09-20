@@ -1,33 +1,34 @@
 # Copyright (C) 2006-2009, The Perl Foundation.
 # $Id$
 
+# Path to parrot_config
+PARROT_CONFIG = parrot_config
+
 # arguments we want to run parrot with
 PARROT_ARGS =
 
 # values from parrot_config
-BUILD_DIR     = /home/florian/devel/parrot/parrot
-LOAD_EXT      = .so
-O             = .o
-EXE           = 
-PERL          = /usr/bin/perl
-RM_F          = $(PERL) -MExtUtils::Command -e rm_f
+PARROT_BIN_DIR = $(shell $(PARROT_CONFIG) bindir)
+PARROT_LIB_DIR = $(shell $(PARROT_CONFIG) libdir)$(shell $(PARROT_CONFIG) versiondir)
+LOAD_EXT       = $(shell $(PARROT_CONFIG) loadext)
+O              = $(shell $(PARROT_CONFIG) o)
+EXE            = $(shell $(PARROT_CONFIG) exe)
+PERL           = $(shell $(PARROT_CONFIG) perl)
+$(eval RM_F = $(shell $(PARROT_CONFIG) rm_f))
 
 # Various paths
-PARROT_DYNEXT = $(BUILD_DIR)/runtime/parrot/dynext
-PERL6GRAMMAR  = $(BUILD_DIR)/runtime/parrot/library/PGE/Perl6Grammar.pbc
-NQP           = $(BUILD_DIR)/compilers/nqp/nqp.pbc
-PCT           = $(BUILD_DIR)/runtime/parrot/library/PCT.pbc
+PERL6GRAMMAR   = $(PARROT_LIB_DIR)/library/PGE/Perl6Grammar.pbc
+NQP_PBC        = $(PARROT_LIB_DIR)/languages/nqp/nqp.pbc
 
 # Set up extensions
 
 # Setup some commands
-PARROT        = $(BUILD_DIR)/parrot$(EXE)
-CAT           = $(PERL) -MExtUtils::Command -e cat
-PBC_TO_EXE    = $(BUILD_DIR)/pbc_to_exe$(EXE)
+PARROT         := $(PARROT_BIN_DIR)/parrot$(EXE)
+PBC_TO_EXE     = $(PARROT_BIN_DIR)/pbc_to_exe$(EXE)
 
-SOURCES = genfile.pir \
-  src/parser/parser.pg \
-  src/parser/actions.pm \
+PIR_SOURCES = genfile.pir \
+  src/genfile_grammar.pir \
+  src/genfile_actions.pir \
   src/Compiler.pir \
   src/Node.pir
 
@@ -46,16 +47,16 @@ all: genfile$(EXE)
 genfile$(EXE): genfile.pbc
 	$(PBC_TO_EXE) genfile.pbc
 
-genfile.pbc: $(PARROT) $(SOURCES)
+genfile.pbc: $(PARROT) $(PIR_SOURCES)
 	$(PARROT) $(PARROT_ARGS) -o genfile.pbc genfile.pir
 
-genfile_grammar.pir: $(PERL6GRAMMAR) src/parser/parser.pg
+src/genfile_grammar.pir: $(PERL6GRAMMAR) src/parser/parser.pg
 	$(PARROT) $(PARROT_ARGS) $(PERL6GRAMMAR) \
 	    --output=src/genfile_grammar.pir \
 	    src/parser/parser.pg
 
-genfile_actions.pir: $(NQP) $(PCT) src/parser/actions.pm
-	$(PARROT) $(PARROT_ARGS) $(NQP) --output=src/genfile_actions.pir \
+src/genfile_actions.pir: $(NQP_PBC) src/parser/actions.pm
+	$(PARROT) $(PARROT_ARGS) $(NQP_PBC) --output=src/genfile_actions.pir \
 	    --target=pir src/parser/actions.pm
 
 # This is a listing of all targets, that are meant to be called by users

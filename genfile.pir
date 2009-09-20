@@ -26,8 +26,8 @@ Creates the Genfile compiler using a C<PCT::HLLCompiler> object.
     parrotns.'export_to'(cns, exports)
 .end
 
-.include 'Compiler.pir'
-.include 'Node.pir'
+.include 'src/Compiler.pir'
+.include 'src/Node.pir'
 
 .sub '' :anon :load :init
     .local pmc p6meta
@@ -38,7 +38,7 @@ Creates the Genfile compiler using a C<PCT::HLLCompiler> object.
     $P1 = $P0.'new'()
     $P1.'language'('Genfile')
 
-    $P2 = get_hll_namespace ['Genfile'; 'Grammar']
+    $P2 = get_hll_global ['Genfile'; 'Grammar'], 'Makefile'
     $P1.'parsegrammar'($P2)
     $P2 = get_hll_namespace ['Genfile'; 'Grammar'; 'Actions']
     $P1.'parseactions'($P2)
@@ -49,8 +49,8 @@ Creates the Genfile compiler using a C<PCT::HLLCompiler> object.
     set_hll_global ['Genfile'; 'Grammar'; 'Actions'], '@nodes', $P0
 .end
 
-.include 'genfile_grammar.pir'
-.include 'genfile_actions.pir'
+.include 'src/genfile_grammar.pir'
+.include 'src/genfile_actions.pir'
 
 =item main(args :slurpy)  :main
 
@@ -65,6 +65,7 @@ to the Genfile compiler.
 
     $P0 = compreg 'Genfile'
     $P1 = new ['Hash']
+    $P1['dd'] = 'this/is/a/path'
     $P0.'mappings'($P1)
     .tailcall $P0.'command_line'(args)
 .end

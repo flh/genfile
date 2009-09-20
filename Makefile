@@ -50,10 +50,10 @@ genfile$(EXE): genfile.pbc
 genfile.pbc: $(PARROT) $(PIR_SOURCES)
 	$(PARROT) $(PARROT_ARGS) -o genfile.pbc genfile.pir
 
-src/genfile_grammar.pir: $(PERL6GRAMMAR) src/parser/parser.pg
+src/genfile_grammar.pir: $(PERL6GRAMMAR) src/parser/parser.pg src/parser/makefile.pg
 	$(PARROT) $(PARROT_ARGS) $(PERL6GRAMMAR) \
 	    --output=src/genfile_grammar.pir \
-	    src/parser/parser.pg
+	    src/parser/parser.pg src/parser/makefile.pg
 
 src/genfile_actions.pir: $(NQP_PBC) src/parser/actions.pm
 	$(PARROT) $(PARROT_ARGS) $(NQP_PBC) --output=src/genfile_actions.pir \

@@ -53,8 +53,11 @@ PIRCODE
 
     code = new ['CodeString']
     $P0 = past.'text'()
-    $P1 = self.'mappings'($P0)
-    $S0 = $P1[$P0]
+    $P1 = self.'mappings'()
+    $P2 = $P1[$P0]
+    if null $P2 goto emit_da_mapping
+    code = $P2
+  emit_da_mapping:
     .return (code)
 .end
 

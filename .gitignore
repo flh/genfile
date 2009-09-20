@@ -2,5 +2,5 @@ genfile
 genfile.c
 genfile.o
 genfile.pbc
-genfile_actions.pir
-genfile_grammar.pir
+src/genfile_actions.pir
+src/genfile_grammar.pir

@@ -26,18 +26,18 @@ CAT           = $(PERL) -MExtUtils::Command -e cat
 PBC_TO_EXE    = $(BUILD_DIR)/pbc_to_exe$(EXE)
 
 SOURCES = genfile.pir \
-  genfile_grammar.pir \
-  genfile_actions.pir \
-  Compiler.pir \
-  Node.pir
+  src/parser/parser.pg \
+  src/parser/actions.pm \
+  src/Compiler.pir \
+  src/Node.pir
 
 CLEANUPS = \
   genfile.pbc \
   genfile.c \
   genfile$(O) \
   genfile$(EXE) \
-  genfile_grammar.pir \
-  genfile_actions.pir
+  src/genfile_grammar.pir \
+  src/genfile_actions.pir
 
 # the default target
 all: genfile$(EXE)
@@ -45,18 +45,18 @@ all: genfile$(EXE)
 # targets for building a standalone genfile
 genfile$(EXE): genfile.pbc
 	$(PBC_TO_EXE) genfile.pbc
-	
+
 genfile.pbc: $(PARROT) $(SOURCES)
 	$(PARROT) $(PARROT_ARGS) -o genfile.pbc genfile.pir
 
-genfile_grammar.pir: $(PERL6GRAMMAR) parser.pg
+genfile_grammar.pir: $(PERL6GRAMMAR) src/parser/parser.pg
 	$(PARROT) $(PARROT_ARGS) $(PERL6GRAMMAR) \
-	    --output=genfile_grammar.pir \
-	    parser.pg
+	    --output=src/genfile_grammar.pir \
+	    src/parser/parser.pg
 
-genfile_actions.pir: $(NQP) $(PCT) actions.pm
-	$(PARROT) $(PARROT_ARGS) $(NQP) --output=genfile_actions.pir \
-	    --target=pir actions.pm
+genfile_actions.pir: $(NQP) $(PCT) src/parser/actions.pm
+	$(PARROT) $(PARROT_ARGS) $(NQP) --output=src/genfile_actions.pir \
+	    --target=pir src/parser/actions.pm
 
 # This is a listing of all targets, that are meant to be called by users
 help:
